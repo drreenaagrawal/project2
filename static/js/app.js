@@ -4,29 +4,53 @@ function buildCharts(sample) {
     console.log(data);
     const Price = data.Price;
     const Year = data.Year;
+    const MSRP = data.MSRP;
     const Latitude = data.Latitude;
     const Longitude = data.Longitude;
+    const Mileage = data.Mileage;
+    const City = data.City;
 
 
     // Build a Bubble Chart
     var bubbleLayout = {
       margin: { t: 0 },
       hovermode: "closest",
-      xaxis: { title: "Year" }
+      xaxis: {
+        showticklabels: false,
+    }
     };
-    var bubbleData = [
-      {
-        x: Year,
-        y: Price,
-        text: Year,
-        mode: "markers",
-        marker: {
-          size: 20,
-          color: Year,
-          colorscale: "Viridis"
-        }
+    // var bubbleData = [
+    //   {
+    //     x: Year,
+    //     y: Price,
+    //     text: Year,
+    //     mode: "markers",
+    //     marker: {
+    //       size: 20,
+    //       color: Year,
+    //       colorscale: "Viridis"
+    //     }
+    //   }
+    // ];
+    trace1 = {
+      "x": (0, Price.length),
+      "y": Price,
+      "name": "Used Car Asking Price",
+      "mode": "markers",
+      marker: {
+        size: 20
       }
-    ];
+    }
+    trace2 = {
+      "x": (0, MSRP.length),
+      "y": MSRP,
+      "name": "MSRP",
+      type: "bar",
+      marker: {
+        color: 'rgba(255,153,51,0.6)'
+      }
+    }
+    var bubbleData = [trace1, trace2];
 
     Plotly.newPlot("pie", bubbleData, bubbleLayout);
 
@@ -37,29 +61,30 @@ function buildCharts(sample) {
         locationmode: 'USA-states',
         lat: Latitude,
         lon: Longitude,
+        text: Price,
         marker: {
             size: 20,
             line: {
-                color: 'black',
-                width: 2
+                color: 'red',
+                width: 1
             },
         }
     }];
 
     var geolayout = {
-        title: 'Used cars for sale',
+        title: 'Used Cars for Sale',
         showlegend: false,
         geo: {
             scope: 'usa',
             projection: {
                 type: 'albers usa'
             },
-            // showland: true,
-            // landcolor: 'rgb(217, 217, 217)',
-            // subunitwidth: 1,
-            // countrywidth: 1,
-            // subunitcolor: 'rgb(255,255,255)',
-            // countrycolor: 'rgb(255,255,255)'
+            showland: true,
+            landcolor: 'rgb(217, 217, 217)',
+            subunitwidth: 1,
+            countrywidth: 1,
+            subunitcolor: 'rgb(125,225,250)',
+            countrycolor: 'rgb(125,225,250)'
         },
     };
 
@@ -91,6 +116,7 @@ function init() {
 function updatePlotlybub(newdata) {
   Plotly.restyle("bubble", "lat", [newdata.lat]);
   Plotly.restyle("bubble", "lon", [newdata.lon]);
+  Plotly.restyle("bubble", "text", [newdata.text]);
 }
 
 

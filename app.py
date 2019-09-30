@@ -89,7 +89,8 @@ def samples(sample):
         Samples.Mileage,
         Samples.Latitude,
         Samples.Longitude,
-        Samples.City
+        Samples.City,
+        Samples.MSRP
     ]
 
 
@@ -105,6 +106,7 @@ def samples(sample):
         'Latitude': df['Latitude'].tolist(),
         'Longitude': df['Longitude'].tolist(),
         'City': df['City'].tolist(),
+        'MSRP': df['MSRP'].tolist(),
         }
 
     return jsonify(data)
@@ -123,6 +125,19 @@ def average():
         vehicles.append(vehicle_dict)
     return jsonify(vehicles)
 
+@app.route("/chart")
+def chart():
+
+    results = db.session.query(Samples.Price, Samples.Mileage).all()
+    Price = [result[0] for result in results]
+    Mileage = [result[1] for result in results]
+    Price.insert(0, "Price")
+    Mileage.insert(0, "Mileage")
+    data = {
+        "Price": Price,
+        "Mileage": Mileage,
+    }
+    return jsonify(data)
 
 
 if __name__ == "__main__":
